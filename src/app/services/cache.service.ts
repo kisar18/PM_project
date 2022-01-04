@@ -35,14 +35,4 @@ export class CacheService {
       return storedData;
     }
   }
-
-  async clearCachedData() {
-    const keys = await this.storage.keys();
-
-    keys.map(async key => {
-      if(key.startsWith(CACHE_KEY)) {
-        await this.storage.remove(key);
-      }
-    });
-  }
 }
