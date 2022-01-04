@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { ApiService } from '../services/api.service';
-import { CacheService } from '../services/cache.service';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +14,6 @@ export class HomePage {
 
   constructor(
     private apiService: ApiService,
-    private cacheService: CacheService,
     ) 
     {
       this.refreshSports();
