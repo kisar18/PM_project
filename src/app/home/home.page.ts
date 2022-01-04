@@ -40,9 +40,4 @@ export class HomePage {
       });
     });
   }
-
-  async clearCache() {
-    this.cacheService.clearCachedData();
-  }
-
 }
