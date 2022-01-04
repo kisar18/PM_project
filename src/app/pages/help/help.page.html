@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center header-title">Help / About</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/" disabled color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-text-center container">
+    <p class="about-paragraph">
+      This app is something like sport dictionary.
+      Through the navigation at bottom of your screen
+      you can access our three main pages.
+    </p>
+    <p class="small-bottom-margin">
+      On the <b>Home page</b> we have a list of sports where
+      you can search to get the one you want.
+    </p>
+    <p class="small-bottom-margin">
+      When you find a sport you are interested in you can
+      tap on it to see the details like a format, icon, description
+      and so on.
+    </p>
+    <p class="small-bottom-margin">
+      When you want to have fun you can go to <b>Sport guesser page</b>
+      where is displayed picture of one sport and you have to guess
+      which sport it is.
+    </p>
+    <p>
+      <b>This page</b> (last section of our navigation) is for you
+      to be able to understand how to interact with our app.
+    </p>
+    <img src="../../../assets/kcads.png" class="image">
+  </div>
+
+</ion-content>
+
+<ion-toolbar slot="bottom">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3" class="ion-text-center">
+        <ion-button href="#">Home</ion-button>
+      </ion-col>
+      <ion-col size="6" class="ion-text-center">
+        <ion-button href="guess-the-sport">Sport Guesser</ion-button>
+      </ion-col>
+      <ion-col size="3" class="ion-text-center">
+        <ion-button href="help">Help</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-toolbar>

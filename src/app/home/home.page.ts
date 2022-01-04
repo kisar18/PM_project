@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { finalize } from 'rxjs/operators';
+import { ApiService } from '../services/api.service';
+import { CacheService } from '../services/cache.service';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +9,40 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  sports: null;
+  searchTerm;
+  sportsNames;
 
-  constructor() {}
+  constructor(
+    private apiService: ApiService,
+    private cacheService: CacheService,
+    ) 
+    {
+      this.refreshSports();
+    }
+
+  async refreshSports(event?) {
+    const refresh = event ? true : false;
+
+    await this.apiService.getSports(refresh).pipe(
+      finalize(() => {
+        if(event) {
+          event.target.complete();
+        }
+      })
+    ).subscribe(data => {
+      this.sports = data;
+      this.sportsNames = data;
+      this.sportsNames.forEach(element => {
+        delete element['strFormat'];
+        delete element['strSportThumb'];
+        delete element['strSportDescription'];
+      });
+    });
+  }
+
+  async clearCache() {
+    this.cacheService.clearCachedData();
+  }
 
 }

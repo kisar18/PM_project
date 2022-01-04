@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar *ngIf="sport" color="light">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="ion-text-center header-title">{{ sport.strSport }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-back-button defaultHref="/" disabled color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<ion-content>
+    <ion-card *ngIf="sport">
+      <ion-card-header class="ion-text-center full-width">
+        <ion-card-title class="detail-title">{{ sport.strSport }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-img src="{{ sport.strSportThumb }}" class="small-bottom-margin"></ion-img>
+        <ion-card-subtitle class="ion-text-center subtitle">Format: {{sport.strFormat}}</ion-card-subtitle>
+        <ion-card-subtitle class="ion-text-center subtitle">↓ Description ↓</ion-card-subtitle>
+        <p class="detail-text ion-text-center">
+          {{ sport.strSportDescription }}
+        </p>
+        <ion-card-subtitle class="ion-text-center subtitle small-top-margin">My note:</ion-card-subtitle>
+        <p id="note" class="detail-text ion-text-center"></p>
+      </ion-card-content>
+      <ion-textarea class="note-textarea" [(ngModel)]="note" placeholder="Here you can write your note or opinion on this sport" rows="3"></ion-textarea>
+      <ion-button (click)="setNote()" expand="full" class="small-top-margin small-bottom-margin" color="secondary">Submit note</ion-button>
+    </ion-card>
+</ion-content>
