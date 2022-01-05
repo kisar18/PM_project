@@ -1,0 +1,6 @@
+{
+	"appId": "com.sportGuesser.app",
+	"appName": "Sport dictionary",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

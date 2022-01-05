@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { CacheService } from 'src/app/services/cache.service';
 
 const FIRST_ID = 102;
 const LAST_ID = 133;
@@ -21,24 +22,36 @@ export class GuessTheSportPage implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private cacheService: CacheService
   ) { }
 
   ngOnInit() {
     this.getRandomSportImage();
   }
 
-  getRandomSportImage() {
+  async getRandomSportImage() {
     const randomId = this.getRandomId();
-    this.apiService.getSports(this.apiService.apiUrl).subscribe(data => {
-      this.sport = data.find(s => s.idSport === randomId);
-      this.wrongId1 = this.getWrongAnswer();
-      this.wrongId2 = this.getWrongAnswer();
-      this.wrongId3 = this.getWrongAnswer();
-      this.wrongAnswer1 = data.find(s => s.idSport === this?.wrongId1);
-      this.wrongAnswer2 = data.find(s => s.idSport === this?.wrongId2);
-      this.wrongAnswer3 = data.find(s => s.idSport === this?.wrongId3);
-      this.answers = this.shuffleAnswers([this.sport, this.wrongAnswer1, this.wrongAnswer2, this.wrongAnswer3]);
-    });
+
+    if(this.apiService.connected) {
+
+      this.apiService.getListItems(this.apiService.apiUrl).subscribe(data => {
+        this.sport = data.sports.find(s => s.idSport === randomId);
+        this.getAllAnswers(data.sports);
+      });
+
+      return;
+    }
+
+    const key = this.apiService.apiUrl;
+    const requestedSports = await this.cacheService.storage.get(key);
+    if (requestedSports == null) {
+      return;
+    }
+    else {
+      this.sport = requestedSports.find(s => s.idSport === randomId)
+      this.getAllAnswers(requestedSports);
+    }
+    
   }
 
   getRandomId() {
@@ -73,7 +86,7 @@ export class GuessTheSportPage implements OnInit {
     return array;
   }
 
-    analyzeChoice() {
+  analyzeChoice() {
     const stringId = ['answer1', 'answer2', 'answer3', 'answer4'];
 
     for(let i = 0; i < 4; i++) {
@@ -88,6 +101,16 @@ export class GuessTheSportPage implements OnInit {
         })
       }
     }
+  }
+
+  getAllAnswers(list) {
+    this.wrongId1 = this.getWrongAnswer();
+    this.wrongId2 = this.getWrongAnswer();
+    this.wrongId3 = this.getWrongAnswer();
+    this.wrongAnswer1 = list.find(s => s.idSport === this?.wrongId1);
+    this.wrongAnswer2 = list.find(s => s.idSport === this?.wrongId2);
+    this.wrongAnswer3 = list.find(s => s.idSport === this?.wrongId3);
+    this.answers = this.shuffleAnswers([this.sport, this.wrongAnswer1, this.wrongAnswer2, this.wrongAnswer3]);
   }
 
   getNextQuestion() {

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService } from 'src/app/services/api.service';
 import { Storage } from '@ionic/storage-angular';
 import { CacheService } from 'src/app/services/cache.service';
 
@@ -15,7 +14,6 @@ export class SportDetailPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private apiService: ApiService,
     private cacheService: CacheService,
   ) { }
 
@@ -25,15 +23,21 @@ export class SportDetailPage implements OnInit {
   
   callGetItemDetails() {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
-    
-    this.apiService.getSports(this.apiService.apiUrl).subscribe(data => {
-      this.sport = data.find(s => s.idSport === id);
-      this.getNote();
-    });
+    this.getSport(id);
+    this.getNote(id);
   }
 
-  async getNote() {
-    const key =`note_${this.sport.strSport}`
+  async getSport(sportId) {
+    const key = "sport_" + sportId;
+    const requestedSport = await this.cacheService.storage.get(key);
+    if (requestedSport == null) {
+      return;
+    }
+    this.sport = requestedSport;
+  }
+
+  async getNote(sportId) {
+    const key = "note_" + sportId;
     const requestedNote = await this.cacheService.storage.get(key);
     if (requestedNote == null) {
       return;
@@ -42,11 +46,11 @@ export class SportDetailPage implements OnInit {
   }
 
   async setNote() {
-    const key =`note_${this.sport.strSport}`
+    const key =`note_${this.sport.idSport}`
     if(this.note == "") {
       return
     }
     await this.cacheService.storage.set(key, this.note);
-    this.getNote();
+    this.getNote(this.sport.idSport);
   }
 }
